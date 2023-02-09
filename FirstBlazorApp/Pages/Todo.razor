@@ -2,30 +2,37 @@
 
 <PageTitle>Todo</PageTitle>
 
-<h1>Todo (@todos.Count(todo => !todo.IsDone))</h1>
+<h1>Todo (@Todos.Count(todo => !todo.IsDone))</h1>
 
 <ul>
-    @foreach (var todo in todos)
+    @foreach (var todo in Todos)
     {
         <li>
-            <p>@todo.Title</p>
+            <p>@todo.Title -  @Date?.ToShortDateString()</p>
         </li>
     }
 </ul>
 
-<input placeholder="Something todo" @bind="newTodo" />
-<button @onclick="AddTodo">Add todo</button>
+<input placeholder="Something todo" @bind="NewTodo" @bind:event="oninput"/>
+<input type="date" data-date-inline-picker="true" @bind:event="onchange" placeholder="Due Date" @bind="Date" />
+<button @onclick="AddTodo">Save</button>
+
+@if (!string.IsNullOrWhiteSpace(NewTodo) || Date != null)
+{
+    <p>@NewTodo Due: @Date?.ToShortDateString()</p>
+}
 
 @code {
-    private List<TodoItem> todos = new();
-    private string? newTodo;
+    private List<TodoItem> Todos = new();
+    private string? NewTodo;
+    private DateTime? Date = null; 
 
     private void AddTodo()
     {
-        if (!string.IsNullOrWhiteSpace(newTodo))
+        if (!string.IsNullOrWhiteSpace(NewTodo))
         {
-            todos.Add(new TodoItem { Title = newTodo });
-            newTodo = string.Empty;
+            Todos.Add(new TodoItem { Title = NewTodo });
+            NewTodo = string.Empty;
         }
     }
 }
