@@ -8,7 +8,7 @@
     @foreach (var todo in Todos)
     {
         <li>
-            <p>@todo.Title -  @Date?.ToShortDateString()</p>
+            <p>@todo.Title @todo.Date?.ToShortDateString()</p>
         </li>
     }
 </ul>
@@ -31,8 +31,9 @@
     {
         if (!string.IsNullOrWhiteSpace(NewTodo))
         {
-            Todos.Add(new TodoItem { Title = NewTodo });
+            Todos.Add(new TodoItem { Title = Date != null ? (NewTodo + " - ") : NewTodo, Date = Date});
             NewTodo = string.Empty;
+            Date = null; 
         }
     }
 }
